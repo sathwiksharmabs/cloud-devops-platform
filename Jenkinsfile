@@ -21,9 +21,9 @@ pipeline {
             }
         }
 
-        stage('Docker Check') {
+        stage('Docker Build') {
             steps {
-                sh 'docker version'
+                sh 'docker build -t cloud-devops-platform:jenkins-${BUILD_NUMBER} .'
             }
         }
 
