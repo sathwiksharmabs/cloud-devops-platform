@@ -2,15 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+
+        stage('Build') {
             steps {
-                checkout scm
+                sh './mvnw clean compile'
             }
         }
 
-        stage('Build & Test') {
+        stage('Test') {
             steps {
-                sh './mvnw clean test'
+                sh './mvnw test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh './mvnw package -DskipTests'
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
     }
