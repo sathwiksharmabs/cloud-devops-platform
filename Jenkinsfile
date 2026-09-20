@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    
+    environment {
+        IMAGE_NAME = 'cloud-devops-platform'
+        IMAGE_TAG = "jenkins-${BUILD_NUMBER}"
+    }
 
     stages {
 
@@ -23,7 +28,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t cloud-devops-platform:jenkins-${BUILD_NUMBER} .'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+            }
+        }
+
+        stage('Docker Image Info') {
+            steps {
+                sh 'docker image inspect ${IMAGE_NAME}:${IMAGE_TAG} --format "{{.Id}} | {{.Config.User}} | {{.Config.Entrypoint}}"'
             }
         }
 
