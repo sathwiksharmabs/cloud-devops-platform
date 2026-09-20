@@ -21,6 +21,12 @@ pipeline {
             }
         }
 
+        stage('Docker Check') {
+            steps {
+                sh 'docker version'
+            }
+        }
+
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
