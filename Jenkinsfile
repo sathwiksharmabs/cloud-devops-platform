@@ -11,7 +11,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh './mvnw test -Dtest=CloudDevopsPlatformApplicationTests.nonExistentTest'
+                ssh './mvnw test'
             }
         }
 
