@@ -11,7 +11,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                ssh './mvnw test'
+                sh './mvnw test'
             }
         }
 
