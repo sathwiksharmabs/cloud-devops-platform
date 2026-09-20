@@ -38,6 +38,12 @@ pipeline {
             }
         }
 
+        stage('Docker Image Verify') {
+            steps {
+                sh 'docker images cloud-devops-platform --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}"'
+            }
+        }
+
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
