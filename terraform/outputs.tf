@@ -22,3 +22,8 @@ output "nat_gateway_ids" {
   description = "IDs of the NAT gateways"
   value       = aws_nat_gateway.main[*].id
 }
+
+output "ecr_repository_url" {
+  description = "ECR repository URL for the application"
+  value       = aws_ecr_repository.app.repository_url
+}
