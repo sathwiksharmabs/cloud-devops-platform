@@ -11,3 +11,15 @@ resource "aws_eks_cluster" "main" {
     Environment = var.environment
   }
 }
+
+resource "aws_eks_addon" "pod_identity_agent" {
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "eks-pod-identity-agent"
+  addon_version               = "v1.4.0-eksbuild.2"
+  resolve_conflicts_on_create = "OVERWRITE"
+
+  tags = {
+    Name        = "${var.environment}-pod-identity-agent"
+    Environment = var.environment
+  }
+}
