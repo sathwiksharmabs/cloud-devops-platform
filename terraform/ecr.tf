@@ -10,4 +10,8 @@ resource "aws_ecr_repository" "app" {
     Name        = "${var.environment}-cloud-devops-platform"
     Environment = var.environment
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
