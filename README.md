@@ -2,7 +2,7 @@
 
 A portfolio DevOps/SRE project demonstrating an end-to-end CI/CD workflow for a Spring Boot CRUD application using Jenkins, Docker, Kubernetes, AWS, and Terraform.
 
-## ## Architecture
+## Architecture
 
 ```mermaid
 flowchart TD
