@@ -2,32 +2,54 @@
 
 A portfolio DevOps/SRE project demonstrating an end-to-end CI/CD workflow for a Spring Boot CRUD application using Jenkins, Docker, Kubernetes, AWS, and Terraform.
 
-## Architecture
+## ## Architecture
 
-Developer
-   |
-   v
-GitHub
-   |
-   v
-Jenkins CI/CD
-   |  Build → Test → Package
-   |  Docker Build → Push → Deploy
-   v
-Amazon ECR
-   |
-   v
-Amazon EKS
-   |
-   +-- Pod 1 → Spring Boot CRUD API
-   +-- Pod 2 → Spring Boot CRUD API
-   |
-   v
-Application Load Balancer
-   |
-   v
-Public API / Users
+```mermaid
+flowchart TD
+    Dev(["Developer"]) --> Git["GitHub Repository"]
 
+    subgraph CICD["CI/CD Pipeline"]
+        Git --> Jenkins["Jenkins"]
+        Jenkins --> Build["Build & Test"]
+        Build --> Docker["Package & Build Docker Image"]
+        Docker --> Push["Push Image"]
+    end
+
+    subgraph AWS["Amazon Web Services"]
+        ECR[("Amazon ECR")]
+        subgraph EKS["Amazon EKS Cluster"]
+            Deploy["Kubernetes Deployment"]
+            P1["Spring Boot Pod 1"]
+            P2["Spring Boot Pod 2"]
+            Deploy --> P1
+            Deploy --> P2
+        end
+        ALB["AWS Load Balancer Controller"]
+        LB(["Application Load Balancer"])
+        
+        P1 --> LB
+        P2 --> LB
+        ALB -. "Manages" .-> LB
+    end
+
+    Push --> ECR
+    ECR -->|"Image deployed by Jenkins"| Deploy
+    LB --> Users(["Public API / Users"])
+
+    TF["Terraform"] -. "Provisions AWS infrastructure" .-> AWS
+
+    classDef source fill:#e8f0fe,stroke:#4285f4,color:#174ea6
+    classDef pipeline fill:#fff3e0,stroke:#ef9a3c,color:#7a4100
+    classDef cloud fill:#e8f5e9,stroke:#43a047,color:#1b5e20
+    classDef infra fill:#f3e5f5,stroke:#8e44ad,color:#512e5f
+
+    class Dev,Git source
+    class Jenkins,Build,Docker,Push pipeline
+    class ECR,Deploy,P1,P2,ALB,LB,Users cloud
+    class TF infra
+```
+
+Terraform provisions and manages the AWS infrastructure, while Jenkins builds and deploys application updates.
 
 ## Tech Stack
 
