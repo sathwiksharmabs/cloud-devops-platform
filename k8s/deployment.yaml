@@ -24,6 +24,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: cloud-devops-platform-config
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-devops-db
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloud-devops-db
+                  key: password
           resources:
             requests:
               cpu: "250m"

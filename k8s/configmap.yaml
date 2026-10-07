@@ -4,3 +4,4 @@ metadata:
   name: cloud-devops-platform-config
 data:
   SERVER_PORT: "8080"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://dev-cloud-devops-db.cu52eiocyuu7.us-east-1.rds.amazonaws.com:5432/clouddevops"
