@@ -1,6 +1,6 @@
 # Cloud DevOps Platform
 
-A portfolio DevOps/SRE project demonstrating an end-to-end CI/CD workflow for a Spring Boot CRUD application using Jenkins, Docker, Kubernetes, AWS, and Terraform.
+A portfolio DevOps/SRE project showcasing an end-to-end CI/CD pipeline for a Spring Boot CRUD application, using Jenkins for automation, Docker for containerization, Kubernetes and Amazon EKS for deployment, Amazon ECR for storing container images, AWS and Terraform for cloud infrastructure provisioning, and Amazon RDS for PostgreSQL database storage.
 
 ## Architecture
 
@@ -26,9 +26,12 @@ flowchart TD
         end
         ALB["AWS Load Balancer Controller"]
         LB(["Application Load Balancer"])
-        
-        P1 --> LB
-        P2 --> LB
+        RDS[("Amazon RDS for PostgreSQL")]
+
+        LB --> P1
+        LB --> P2
+        P1 --> RDS
+        P2 --> RDS
         ALB -. "Manages" .-> LB
     end
 
@@ -46,10 +49,8 @@ flowchart TD
     class Dev,Git source
     class Jenkins,Build,Docker,Push pipeline
     class ECR,Deploy,P1,P2,ALB,LB,Users cloud
-    class TF infra
+    class RDS,TF infra
 ```
-
-Terraform provisions and manages the AWS infrastructure, while Jenkins builds and deploys application updates.
 
 ## Tech Stack
 
@@ -60,20 +61,20 @@ Terraform provisions and manages the AWS infrastructure, while Jenkins builds an
 - Container Registry: Amazon ECR
 - Orchestration: Kubernetes, Amazon EKS
 - Load Balancing: AWS Application Load Balancer
+- Database: Amazon RDS for PostgreSQL
 - Infrastructure as Code: Terraform
 
 ## What It Does
 
-The project automates the complete journey from source code to a publicly accessible application:
 1. Developers push code to GitHub.
-2. Jenkins automatically builds and tests the application.
+2. Jenkins builds and tests the application.
 3. Maven packages the application and Docker builds the container image.
 4. Jenkins pushes the image to Amazon ECR with a build-specific tag.
 5. Jenkins updates the Kubernetes Deployment running on Amazon EKS.
 6. Kubernetes manages two application replicas and performs health checks.
 7. The AWS Load Balancer Controller exposes the application through an internet-facing ALB.
 8. The Spring Boot CRUD API can then be accessed publicly.
-
+9. The application stores and retrieves task data in a shared PostgreSQL database hosted on Amazon RDS.
 
 ## Key Features
 
@@ -82,6 +83,8 @@ The project automates the complete journey from source code to a publicly access
 - Kubernetes deployment — Application runs with two replicas on Amazon EKS.
 - Health and reliability — Startup, readiness, and liveness probes are configured for the application.
 - AWS integration — ECR stores application images, EKS runs the workloads, and ALB provides public access.
+- Database integration — Amazon RDS for PostgreSQL stores task data shared by both application replicas.
+- Database security — RDS access is restricted to the EKS node security group, with credentials managed through Kubernetes Secrets.
 - Infrastructure as Code — Terraform manages the AWS infrastructure instead of relying on manual provisioning.
 - Deployment verification — Jenkins verifies Kubernetes rollout completion and running pods.
 - Rollback capability — Kubernetes rollout history and rollback were tested as part of the deployment workflow.
